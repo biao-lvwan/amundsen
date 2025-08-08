@@ -1,7 +1,8 @@
 ARG METADATASERVICE_BASE
 ARG SEARCHSERVICE_BASE
 
-FROM node:12-slim as node-stage
+#FROM node:12-slim as node-stage
+FROM node:12-alpine as node-stage
 WORKDIR /app/amundsen_application/static
 
 COPY ./frontend/amundsen_application/static/package.json /app/amundsen_application/static/package.json
@@ -14,14 +15,18 @@ RUN npm run dev-build
 
 COPY ./frontend /app
 
-FROM python:3.8-slim
+#FROM python:3.8-slim
 WORKDIR /app
 
 COPY ./frontend /app
+ENV PYTHONUNBUFFERED=1
+RUN apk add --update --no-cache python3 && ln -sf python3 /usr/bin/python
+RUN python3 -m ensurepip
+RUN pip3 install --no-cache --upgrade pip setuptools
 COPY requirements-dev.txt /app/requirements-dev.txt
 COPY requirements-common.txt /app/requirements-common.txt
 
-COPY --from=node-stage /app /app
+#COPY --from=node-stage /app /app
 
 RUN pip3 install -e .
 

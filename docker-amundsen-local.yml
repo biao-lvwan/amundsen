@@ -32,9 +32,10 @@ services:
         - discovery.type=single-node
         - xpack.security.enabled=false
   amundsensearch:
-      build:
-        context: .
-        dockerfile: Dockerfile.search.public
+      #build:
+      #  context: .
+      #  dockerfile: Dockerfile.search.public
+      image: amundsen/amundsensearch:v0.0.1
       container_name: amundsensearch
       ports:
         - 5001:5001
@@ -45,9 +46,10 @@ services:
       environment:
         - PROXY_ENDPOINT=es_amundsen
   amundsenmetadata:
-      build:
-        context: .
-        dockerfile: Dockerfile.metadata.public
+      #build:
+      #  context: .
+      #  dockerfile: Dockerfile.metadata.public
+      image: amundsen/amundsenmetadata:v0.0.1
       container_name: amundsenmetadata
       depends_on:
         - neo4j
@@ -58,12 +60,13 @@ services:
       environment:
          - PROXY_HOST=bolt://neo4j_amundsen
   amundsenfrontend:
-      build:
-        args:
-          SEARCHSERVICE_BASE: http://amundsensearch:5001
-          METADATASERVICE_BASE: http://amundsenmetadata:5002
-        context: .
-        dockerfile: Dockerfile.frontend.local
+      #build:
+      #  args:
+      #    SEARCHSERVICE_BASE: http://amundsensearch:5001
+      #    METADATASERVICE_BASE: http://amundsenmetadata:5002
+      #  context: .
+      #  dockerfile: Dockerfile.frontend.local
+      image: amundsen/amundsenfrontend-local:v0.0.1
       container_name: amundsenfrontend
       depends_on:
         - amundsenmetadata

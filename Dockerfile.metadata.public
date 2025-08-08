@@ -1,4 +1,14 @@
 FROM python:3.8-slim as base
+
+# 添加阿里云的源文件
+RUN echo "deb http://mirrors.aliyun.com/debian/ buster main" > /etc/apt/sources.list && \
+    echo "deb-src http://mirrors.aliyun.com/debian/ buster main" >> /etc/apt/sources.list && \
+    echo "deb http://mirrors.aliyun.com/debian-security/ buster/updates main" >> /etc/apt/sources.list && \
+    echo "deb-src http://mirrors.aliyun.com/debian-security/ buster/updates main" >> /etc/apt/sources.list
+
+# 删除原有的源文件，确保只使用阿里的源
+RUN rm -f /etc/apt/sources.list
+
 WORKDIR /app
 RUN pip3 install gunicorn
 
